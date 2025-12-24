@@ -6,7 +6,7 @@
 > Программа обучения: **DevOps-инженер (Netology)**\
 > Группа: **FOPS-29**\
 > Дата сдачи: **Декабрь 2025**\
-> Статус проекта: **Завершён и готов к защите**
+> Статус проекта: **Завершён и готов к защите**\
 > *Проект выполнен в рамках учебного дипломного задания и не предназначен для промышленной эксплуатации без дополнительной доработки.*
 
 ---
@@ -170,24 +170,13 @@ Kubernetes Cluster (v1.28)
 
 Внешние пользователи (HTTP/HTTPS)
          ↓
-┌─────────────────────────────────┐
-│ Ingress Controller              │
-│   (ingress-nginx)               │
-└─────────────────────────────────┘
-         ↓ (internal traffic)
-┌─────────────────────────────────┐
-│ Service: devops-diplom-app-     │
-│          service                │
-└─────────────────────────────────┘
-         ↓ (load balancing)
-     ├─────────────┼─────────────┤
-     ↓             ↓
-┌─────────┐   ┌─────────┐
-│ Pod 1   │   │ Pod 2   │
-│ devops- │   │ devops- │
-│ diplom- │   │ diplom- │
-│ app     │   │ app     │
-└─────────┘   └─────────┘
+Ingress Controller (ingress-nginx)
+         ↓ (внутренний трафик)
+Service: devops-diplom-app-service
+         ↓ (балансировка нагрузки)
+      ├───────────────┼───────────────┤
+      ↓               ↓
+Pod 1: devops-diplom-app   Pod 2: devops-diplom-app
 
 ## Реализованные функции и возможности
 
@@ -208,22 +197,22 @@ Kubernetes Cluster (v1.28)
 
 - **Автоматическая сборка** Docker-образов при каждом push в `main`  
 - **Тегирование образов** по SHA коммита и версиям (напр., `v1.0.0`)  
-- **Безопасный деплой** с использованием Service Account  
-- **Rolling updates** без downtime (`kubectl set image`)  
-- **Self-hosted runner** для выполнения jobs непосредственно в кластере  
+- **Безопасный деплой** с использованием Service Account 
+- **Rolling updates** без downtime (`kubectl set image`)
+- **Self-hosted runner** для выполнения jobs непосредственно в кластере
 
 ### 4. Комплексный мониторинг
 
-- **Автоматическое обнаружение** целей мониторинга (ServiceMonitor)  
-- **Предустановленные дашборды** Grafana для Kubernetes  
-- **Мониторинг на всех уровнях**: инфраструктура, кластер, приложения  
-- **Готовность к настройке алертинга** через Alertmanager  
+- **Автоматическое обнаружение** целей мониторинга (`ServiceMonitor`)
+- **Предустановленные дашборды** `Grafana` для `Kubernetes`
+- **Мониторинг на всех уровнях**: инфраструктура, кластер, приложения
+- **Готовность к настройке алертинга** через `Alertmanager`
 
 ### 5. Безопасность и управление доступом
 
-- **RBAC-настройки** для CI/CD runner  
-- **Secret management** через Kubernetes Secrets  
-- **Изоляция окружений** через namespaces  
+- **RBAC-настройки** для `CI/CD runner`  
+- **Secret management** через `Kubernetes Secrets`  
+- **Изоляция окружений** через `namespaces`  
 - **Доступ к registry** через `imagePullSecrets`
 
 ## Репозитории проекта
@@ -242,11 +231,11 @@ Kubernetes Cluster (v1.28)
 
 ### Особенности реализации
 
-- **Двухэтапный процесс**: отдельные jobs для сборки и деплоя  
-- **Self-hosted runner**: выполнение deploy job на master-ноде кластера  
-- **Безопасные секреты**: все sensitive данные в GitHub Secrets  
+- **Двухэтапный процесс**: отдельные `jobs` для сборки и деплоя  
+- **Self-hosted runner**: выполнение `deploy job` на `master`-ноде кластера  
+- **Безопасные секреты**: все `sensitive` данные в `GitHub Secrets`  
 - **Идемпотентность**: `kubectl apply` обеспечивает повторяемость деплоя  
-- **Zero-downtime updates**: стратегия rolling update с проверкой готовности
+- **Zero-downtime updates**: стратегия `rolling update` с проверкой готовности
 
 ---
 
@@ -260,9 +249,9 @@ Kubernetes Cluster (v1.28)
   - `Kubernetes / API Server`
   - `Kubernetes / Compute Resources / Namespace (Pods)`
   - `Kubernetes / Kubelet`
-- Alertmanager (готов к настройке правил оповещения)  
-- kube-state-metrics для метрик состояния объектов Kubernetes  
-- node-exporter для метрик уровня операционной системы
+- `Alertmanager` (готов к настройке правил оповещения)  
+- `kube-state-metrics` для метрик состояния объектов `Kubernetes`  
+- `node-exporter` для метрик уровня операционной системы
 
 ### Ключевые метрики
 
@@ -311,14 +300,14 @@ terraform init && terraform apply
 
 **Проблема**: Ошибка подключения к `localhost:8080` при выполнении `kubectl` команд в workflow.  
 **Решение**:  
-- Создание Service Account с необходимыми правами  
-- Генерация `kubeconfig` с токеном SA  
-- Использование этого `kubeconfig` в GitHub Actions через Secrets  
-- Настройка RBAC правил для ограничения доступа к namespace `cicd`
+- Создание `Service Account` с необходимыми правами  
+- Генерация `kubeconfig` с токеном `SA`  
+- Использование этого `kubeconfig` в `GitHub Actions` через `Secrets`  
+- Настройка `RBAC` правил для ограничения доступа к namespace `cicd`
 
 ### Проблема 2: ImagePullBackOff при деплое приложения  
 
-**Проблема**: Поды не могут загрузить образ из приватного Container Registry.  
+**Проблема**: Поды не могут загрузить образ из приватного `Container Registry`.  
 **Решение**:  
 - Создание Secret типа `docker-registry` с учётными данными Yandex Cloud  
 - Добавление `imagePullSecrets` в спецификацию Deployment  
@@ -326,15 +315,15 @@ terraform init && terraform apply
 
 ### Проблема 3: Настройка self-hosted GitHub Actions runner  
 
-**Проблема**: Обеспечение безопасного и надёжного выполнения jobs на master-ноде.  
+**Проблема**: Обеспечение безопасного и надёжного выполнения `jobs` на master-ноде.  
 **Решение**:  
 - Установка и регистрация runner на master-ноде  
-- Настройка labels для выбора конкретного runner  
-- Ограничение прав runner через отдельный Service Account
+- Настройка `labels` для выбора конкретного `runner`  
+- Ограничение прав `runner` через отдельный `Service Account`
 
 ### Проблема 4: Управление state Terraform в команде  
 
-- Terraform-конфигурации проекта являются воспроизводимыми и позволяют развернуть инфраструктуру с нуля. В рамках дипломного проекта используется локальный запуск Terraform без обязательного remote backend, что соответствует требованиям задания.
+- Terraform-конфигурации проекта являются воспроизводимыми и позволяют развернуть инфраструктуру с нуля. В рамках дипломного проекта используется локальный запуск Terraform без обязательного `remote backend`, что соответствует требованиям задания.
 
 ---
 
@@ -346,8 +335,8 @@ terraform init && terraform apply
 | Репозиторий с Kubernetes-манифестами       | `devops-diplom-k8s`                           | Выполнено    |
 | Репозиторий с Dockerfile и CI/CD           | `devops-diplom-app`                           | Выполнено    |
 | Self-hosted Kubernetes кластер             | 3 ноды (1 master, 2 worker)                   | Выполнено    |
-| Работоспособный CI/CD pipeline             | GitHub Actions с self-hosted runner           | Выполнено    |
-| Система мониторинга                        | Prometheus + Grafana в namespace `monitoring` | Выполнено    |
+| Работоспособный CI/CD pipeline             | GitHub Actions с `self-hosted runner`           | Выполнено    |
+| Система мониторинга                        | `Prometheus` + `Grafana в namespace monitoring` | Выполнено    |
 | Скриншоты всех этапов                      | В каждом репозитории в папке `screenshots/`   | Выполнено    |
 | Документация                               | Подробные `README.md` в каждом репозитории    | Выполнено    |
 | Воспроизводимость                          | Terraform-конфигурации                        | Выполнено    |
