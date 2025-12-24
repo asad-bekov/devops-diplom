@@ -168,6 +168,7 @@ Kubernetes Cluster (v1.28)
 ```
 ### Сетевые потоки данных
 
+```text
 Внешние пользователи
         │
         │  HTTP / HTTPS
@@ -190,7 +191,7 @@ Kubernetes Cluster (v1.28)
 │ Pod 1             │   │ Pod 2             │
 │ devops-diplom-app │   │ devops-diplom-app │
 └───────────────────┘   └───────────────────┘
-
+```
 
 ## Реализованные функции и возможности
 
