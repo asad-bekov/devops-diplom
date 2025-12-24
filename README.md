@@ -168,15 +168,29 @@ Kubernetes Cluster (v1.28)
 ```
 ### Сетевые потоки данных
 
-Внешние пользователи (HTTP/HTTPS)
-         ↓
-Ingress Controller (ingress-nginx)
-         ↓ (внутренний трафик)
-Service: devops-diplom-app-service
-         ↓ (балансировка нагрузки)
-      ├───────────────┼───────────────┤
-      ↓               ↓
-Pod 1: devops-diplom-app   Pod 2: devops-diplom-app
+Внешние пользователи
+        │
+        │  HTTP / HTTPS
+        ▼
+┌───────────────────────────────┐
+│   Ingress Controller          │
+│   (ingress-nginx)             │
+└───────────────────────────────┘
+        │
+        │  Внутренний трафик (ClusterIP)
+        ▼
+┌───────────────────────────────┐
+│   Service                     │
+│   devops-diplom-app-service   │
+└───────────────────────────────┘
+        │
+        │  Load Balancing
+        ▼
+┌───────────────────┐   ┌───────────────────┐
+│ Pod 1             │   │ Pod 2             │
+│ devops-diplom-app │   │ devops-diplom-app │
+└───────────────────┘   └───────────────────┘
+
 
 ## Реализованные функции и возможности
 
